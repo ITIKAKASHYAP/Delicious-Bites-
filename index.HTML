@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Bites - Authentic Indian Cuisine</title>
+    <meta name="description" content="Experience authentic Indian dining at Delicious Bites. Enjoy our carefully crafted menu featuring the finest Indian ingredients in a welcoming atmosphere.">
+
+    <!-- Favicon -->
+    <link rel="icon" href="https://placehold.co/32x32/FF6347/FFFFFF?text=DB" type="image/x-icon">
+
+    <!-- Tailwind CSS CDN with custom configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#E53E3E',
+                        secondary: '#F56565',  
+                        dark: '#1A202C',
+                        light: '#F7FAFC',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 1s ease-in-out',
+                        'fadeInUp': 'fadeInUp 0.8s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Font: Inter with multiple weights -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom styles */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Hero section overlay gradient */
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+        }
+
+        /* Menu item hover effect */
+        .menu-item {
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Custom animations */
+        .animate-delay-1 {
+            animation-delay: 0.3s;
+        }
+
+        .animate-delay-2 {
+            animation-delay: 0.6s;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        /* Custom alert modal */
+        #custom-alert-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100; /* Higher than other modals */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #custom-alert-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #custom-alert-modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            max-width: 400px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        #custom-alert-modal.active #custom-alert-modal-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-dark text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#home" class="text-3xl font-bold rounded-md py-1 px-3 bg-primary hover:bg-secondary transition duration-300 flex items-center">
+                    <span class="mr-2"><i class="fas fa-utensils"></i></span>
+                    <span>Delicious Bites</span>
+                </a>
+            </div>
+
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-secondary transition duration-300 font-medium flex items-center">
+                    <span class="mr-1"><i class="fas fa-home"></i></span>
+                    Home
+                </a>
+                <a href="#menu" class="hover:text-secondary transition duration-300 font-medium flex items-center">
+                    <span class="mr-1"><i class="fas fa-book-open"></i></span>
+                    Menu
+                </a>
+                <a href="#about" class="hover:text-secondary transition duration-300 font-medium flex items-center">
+                    <span class="mr-1"><i class="fas fa-info-circle"></i></span>
+                    About
+                </a>
+                <a href="#contact" class="hover:text-secondary transition duration-300 font-medium flex items-center">
+                    <span class="mr-1"><i class="fas fa-envelope"></i></span>
+                    Contact
+                </a>
+                <a href="#reservations" class="bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded-full transition duration-300">
+                    Reservations
+                </a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="md:hidden bg-gray-800 hidden">
+            <nav class="flex flex-col space-y-1 p-4">
+                <a href="#home" class="block py-3 px-4 hover:bg-gray-700 rounded-md transition duration-300 font-medium">
+                    <i class="fas fa-home mr-2"></i> Home
+                </a>
+                <a href="#menu" class="block py-3 px-4 hover:bg-gray-700 rounded-md transition duration-300 font-medium">
+                    <i class="fas fa-book-open mr-2"></i> Menu
+                </a>
+                <a href="#about" class="block py-3 px-4 hover:bg-gray-700 rounded-md transition duration-300 font-medium">
+                    <i class="fas fa-info-circle mr-2"></i> About
+                </a>
+                <a href="#contact" class="block py-3 px-4 hover:bg-gray-700 rounded-md transition duration-300 font-medium">
+                    <i class="fas fa-envelope mr-2"></i> Contact
+                </a>
+                <a href="#reservations" class="block py-3 px-4 bg-primary hover:bg-secondary text-white rounded-md transition duration-300 font-medium text-center mt-2">
+                    <i class="fas fa-calendar-alt mr-2"></i> Reservations
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative bg-cover bg-center h-screen flex items-center justify-center text-white"
+            style="background-image: url('bg.png');">
+            <div class="absolute inset-0 hero-overlay"></div>
+            <div class="z-10 text-center px-4 max-w-4xl mx-auto">
+                <h2 class="text-5xl md:text-7xl font-extrabold mb-6 animate-fadeIn">Savor the Flavors of India</h2>
+                <p class="text-xl md:text-2xl mb-8 animate-fadeIn animate-delay-1">Experience authentic Indian dining at Delicious Bites, where every dish tells a story.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fadeIn animate-delay-2">
+                    <a href="#menu" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                        View Our Menu
+                    </a>
+                    <a href="#reservations" class="bg-white hover:bg-gray-100 text-dark font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                        Book a Table
+                    </a>
+                </div>
+                <!-- Fallback for image -->
+                <img src="https://placehold.co/1920x1080/FF6347/FFFFFF?text=Indian+Cuisine" onerror="this.style.display='none'" class="hidden" alt="Fallback Indian Dish">
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <a href="#menu" class="text-white">
+                    <i class="fas fa-chevron-down text-2xl"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Featured Section -->
+        <section class="py-16 bg-light">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Why Choose Delicious Bites?</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">We're committed to providing an exceptional Indian dining experience with fresh ingredients and impeccable service.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center animate-fadeInUp">
+                        <div class="text-primary text-4xl mb-4">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Authentic Flavors</h3>
+                        <p class="text-gray-600">We source only the freshest, traditional Indian ingredients for every dish we serve.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center animate-fadeInUp animate-delay-1">
+                        <div class="text-primary text-4xl mb-4">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Experienced Indian Chefs</h3>
+                        <p class="text-gray-600">Our culinary team brings years of experience and creativity to your plate, mastering traditional Indian recipes.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center animate-fadeInUp animate-delay-2">
+                        <div class="text-primary text-4xl mb-4">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Warm Hospitality</h3>
+                        <p class="text-gray-600">We're dedicated to making your dining experience memorable and enjoyable with true Indian hospitality.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Our Authentic Indian Culinary Creations</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Explore our carefully crafted menu featuring a variety of regional Indian flavors to satisfy every palate.</p>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-6 text-dark border-b pb-2">Starters</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Starter 1: Samosa -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Samosa_at_BarCampMumbai4.jpg" alt="Samosa" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Samosa (2 pcs)</h4>
+                                <span class="text-primary font-bold">₹90</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Crispy pastry filled with spiced potatoes and peas, served with chutney.</p>
+                            <div class="text-sm text-gray-500">Vegetarian</div>
+                        </div>
+
+                        <!-- Starter 2: Aloo Tikki -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7f/Aloo_Tikki_Chaat.JPG" alt="Aloo Tikki" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Aloo Tikki Chaat</h4>
+                                <span class="text-primary font-bold">₹120</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Spiced potato patties topped with yogurt, chutneys, and chickpeas.</p>
+                            <div class="text-sm text-gray-500">Vegetarian, Gluten-free option</div>
+                        </div>
+
+                        <!-- Starter 3: Pani Puri -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://www.awesomecuisine.com/wp-content/uploads/2007/11/Pani-Puri.jpg" alt="Pani Puri" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Pani Puri (6 pcs)</h4>
+                                <span class="text-primary font-bold">₹80</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Hollow puris filled with spiced potatoes, chickpeas, and tangy flavored water.</p>
+                            <div class="text-sm text-gray-500">Vegan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-6 text-dark border-b pb-2">Main Courses</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Main 1: Butter Chicken -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYU7bkgqtucD8ngwFxlIK-rDPzBR4k-ZIkTA&s" alt="Butter Chicken" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Butter Chicken</h4>
+                                <span class="text-primary font-bold">₹350</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Tender chicken pieces simmered in a rich, creamy tomato and butter gravy.</p>
+                            <div class="text-sm text-gray-500">Chef's Special</div>
+                        </div>
+
+                        <!-- Main 2: Paneer Tikka Masala -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c2/Paneer_Tikka_Masala.jpg" alt="Paneer Tikka Masala" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Paneer Tikka Masala</h4>
+                                <span class="text-primary font-bold">₹300</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Cubes of grilled paneer (Indian cheese) in a spiced tomato-cream sauce.</p>
+                            <div class="text-sm text-gray-500">Vegetarian</div>
+                        </div>
+
+                        <!-- Main 3: Dal Makhani -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Dal-Makhani.jpg" alt="Dal Makhani" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Dal Makhani</h4>
+                                <span class="text-primary font-bold">₹220</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Slow-cooked black lentils in a rich, creamy, and buttery gravy.</p>
+                            <div class="text-sm text-gray-500">Vegetarian</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 text-dark border-b pb-2">Desserts</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Dessert 1: Gulab Jamun -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Gulabjamun_op.jpg" alt="Gulab Jamun" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Gulab Jamun (2 pcs)</h4>
+                                <span class="text-primary font-bold">₹70</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Deep-fried milk-solids dumpling soaked in a rose-flavored sugar syrup.</p>
+                        </div>
+
+                        <!-- Dessert 2: Kulfi -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Kulfi_Malai.jpg" alt="Kulfi" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Malai Kulfi</h4>
+                                <span class="text-primary font-bold">₹100</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Traditional Indian ice cream, dense and creamy, flavored with cardamom.</p>
+                        </div>
+
+                        <!-- Dessert 3: Jalebi -->
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-md p-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Jalebi_-_Closeup_View_of_Jalebis.JPG" alt="Jalebi" class="w-full h-40 object-cover rounded-md mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xl font-semibold">Hot Jalebi</h4>
+                                <span class="text-primary font-bold">₹60</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Crispy, spiral-shaped sweet fried in ghee and soaked in sugar syrup.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="#" id="view-full-menu-btn" class="inline-block border-2 border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-6 rounded-full transition duration-300">
+                        View Full Menu
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specials Section -->
+        <section class="py-16 bg-primary text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Today's Indian Specials</h2>
+                <p class="text-xl mb-8 max-w-2xl mx-auto">Enjoy our chef's specially curated Indian dishes available for a limited time.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Special 1: Hyderabadi Biryani -->
+                    <div class="menu-item bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Hyderabadi_Chicken_Biryani.jpg" alt="Hyderabadi Chicken Biryani" class="w-full h-32 object-cover rounded-md mb-4">
+                        <h3 class="text-2xl font-semibold mb-3">Hyderabadi Chicken Biryani</h3>
+                        <p class="mb-4">Fragrant basmati rice cooked with succulent chicken and aromatic spices.</p>
+                        <div class="text-xl font-bold">₹380</div>
+                    </div>
+
+                    <!-- Special 2: Goan Fish Curry -->
+                    <div class="menu-item bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                        <img src="https://www.chefkunalkapur.com/wp-content/uploads/2023/01/DSC08225-1300x731.jpg?v=1674579659" alt="Goan Fish Curry" class="w-full h-32 object-cover rounded-md mb-4">
+                        <h3 class="text-2xl font-semibold mb-3">Goan Fish Curry</h3>
+                        <p class="mb-4">Tangy and spicy fish curry, a coastal delight from Goa.</p>
+                        <div class="text-xl font-bold">₹420</div>
+                    </div>
+
+                    <!-- Special 3: Litti Chokha -->
+                    <div class="menu-item bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                        <img src="https://static.toiimg.com/thumb/53188495.cms?width=1200&height=900" alt="Litti Chokha" class="w-full h-32 object-cover rounded-md mb-4">
+                        <h3 class="text-2xl font-semibold mb-3">Litti Chokha</h3>
+                        <p class="mb-4">Traditional Bihari dish with roasted gram flour balls and mashed vegetables.</p>
+                        <div class="text-xl font-bold">₹250</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <img src="our story.png" onerror="this.style.display='none'"
+                             alt="Our Indian Restaurant"
+                             class="w-full rounded-lg shadow-xl object-cover h-96">
+                        <!-- Fallback for image -->
+                        <img src="our story.png" onerror="this.style.display='none'" class="hidden" alt="Fallback Indian Restaurant">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-dark">Our Story</h2>
+                        <p class="text-gray-700 text-lg leading-relaxed mb-4">
+                            Founded in 2010, Delicious Bites began as a small family-owned bistro with a passion for creating memorable dining experiences. What started as a humble 10-table restaurant has grown into one of the city's most beloved dining destinations, thanks to our commitment to quality, innovation, and authentic Indian hospitality.
+                        </p>
+                        <p class="text-gray-700 text-lg leading-relaxed mb-6">
+                            Our executive chef, Rohit Sharma, brings over 20 years of culinary expertise from various regions of India, crafting a menu that blends traditional Indian techniques with modern presentation. We take pride in supporting local farmers and spice merchants, ensuring the freshest ingredients and authentic flavors make it to your plate.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <div class="text-primary text-2xl mr-3">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold">100+</div>
+                                    <div class="text-sm text-gray-600">Indian Menu Items</div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <div class="text-primary text-2xl mr-3">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold">15</div>
+                                    <div class="text-sm text-gray-600">Culinary Awards</div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                                <div class="text-primary text-2xl mr-3">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold">50+</div>
+                                    <div class="text-sm text-gray-600">Team Members</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">What Our Guests Say</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Don't just take our word for it - hear from our satisfied customers.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 text-xl mr-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4 italic">"The Butter Chicken was incredibly flavorful, and the service was so welcoming. This is now our go-to spot for authentic Indian food!"</p>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Priya S." class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <div class="font-semibold">Priya S.</div>
+                                <div class="text-sm text-gray-500">Regular Guest</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 text-xl mr-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4 italic">"The atmosphere reminds me of home, and the Hyderabadi Biryani special was truly divine. I can't wait to come back and try more dishes."</p>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
+                                <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Ravi K." class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <div class="font-semibold">Ravi K.</div>
+                                <div class="text-sm text-gray-500">First-time Visitor</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="text-yellow-400 text-xl mr-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4 italic">"As a vegetarian, I appreciate the creative and delicious options. The Paneer Tikka Masala is my favorite - rich and perfectly spiced!"</p>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-300 mr-3 overflow-hidden">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Anjali D." class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <div class="font-semibold">Anjali D.</div>
+                                <div class="text-sm text-gray-500">Frequent Diner</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reservations Section -->
+        <section id="reservations" class="py-16 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/2 bg-cover bg-center hidden md:block">
+                            <img src="map.png"
+                                 alt="Map to Delicious Bites"
+                                 class="w-full rounded-lg shadow-xl object-cover h-96">
+                            <!-- Fallback for image -->
+                            <img src="https://placehold.co/1170x400/E53E3E/FFFFFF?text=Map" onerror="this.style.display='none'" class="hidden" alt="Fallback Map">
+                        </div>
+                        <div class="md:w-1/2 p-8">
+                            <h2 class="text-3xl font-bold text-dark mb-6">Make a Reservation</h2>
+                            <form>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Full Name</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                           id="name" type="text" placeholder="Your name" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                           id="email" type="email" placeholder="your@email.com" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">Phone Number</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                           id="phone" type="tel" placeholder="(+91) 98765-43210" required>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="date">Date</label>
+                                        <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                               id="date" type="date" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="time">Time</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                                id="time" required>
+                                            <option value="">Select time</option>
+                                            <option value="11:00">11:00 AM</option>
+                                            <option value="11:30">11:30 AM</option>
+                                            <option value="12:00">12:00 PM</option>
+                                            <option value="12:30">12:30 PM</option>
+                                            <option value="13:00">01:00 PM</option>
+                                            <option value="13:30">01:30 PM</option>
+                                            <option value="18:00">06:00 PM</option>
+                                            <option value="18:30">06:30 PM</option>
+                                            <option value="19:00">07:00 PM</option>
+                                            <option value="19:30">07:30 PM</option>
+                                            <option value="20:00">08:00 PM</option>
+                                            <option value="20:30">08:30 PM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="guests">Number of Guests</label>
+                                    <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                           id="guests" type="number" min="1" max="10" placeholder="1-10 guests" required>
+                                </div>
+                                <div class="mb-6">
+                                    <label class="block text-gray-700 text-sm font-bold mb-2" for="message">Special Requests</label>
+                                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary h-24"
+                                              id="message" placeholder="Allergies, dietary restrictions, special occasions..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-primary hover:bg-secondary text-white font-bold py-3 px-4 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                                    Book Now
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Get in Touch</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">Have questions or feedback? We'd love to hear from you!</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-dark">Our Location</h3>
+                        <p class="text-gray-700 mb-2 flex items-center"><i class="fas fa-map-marker-alt text-primary mr-3 text-lg"></i> 123 Spice Route, Curry City, India 110001</p>
+                        <p class="text-700 mb-2 flex items-center"><i class="fas fa-phone-alt text-primary mr-3 text-lg"></i> +91 98765-43210</p>
+                        <p class="text-gray-700 mb-4 flex items-center"><i class="fas fa-envelope text-primary mr-3 text-lg"></i> info@deliciousbites.com</p>
+
+                        <h3 class="text-2xl font-semibold mb-4 text-dark">Hours of Operation</h3>
+                        <ul class="text-gray-700 space-y-1">
+                            <li><span class="font-medium">Monday - Friday:</span> 11:00 AM - 10:00 PM</li>
+                            <li><span class="font-medium">Saturday:</span> 12:00 PM - 11:00 PM</li>
+                            <li><span class="font-medium">Sunday:</span> 12:00 PM - 9:00 PM</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4 text-dark">Send Us a Message</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="contact-name">Your Name</label>
+                                <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                       id="contact-name" type="text" placeholder="John Doe" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="contact-email">Your Email</label>
+                                <input class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                       id="contact-email" type="email" placeholder="john@example.com" required>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="contact-message">Your Message</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary h-32"
+                                          id="contact-message" placeholder="Enter your message here..." required></textarea>
+                            </div>
+                            <button type="submit" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-2xl hover:text-secondary transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-2xl hover:text-secondary transition duration-300"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-2xl hover:text-secondary transition duration-300"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-2xl hover:text-secondary transition duration-300"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p class="text-gray-400">&copy; 2023 Delicious Bites. All rights reserved.</p>
+            <p class="text-gray-400 text-sm mt-2">Crafted with <i class="fas fa-heart text-primary mx-1"></i> for an exquisite dining experience.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top bg-primary hover:bg-secondary text-white p-3 rounded-full shadow-lg">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Full Menu Modal -->
+    <div id="full-menu-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="close-menu-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold">&times;</button>
+            <h2 class="text-3xl md:text-4xl font-bold text-dark mb-6 text-center">Our Complete Menu</h2>
+
+            <div class="space-y-8">
+                <!-- Appetizers -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-dark border-b pb-2">Appetizers</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Paneer_Pakora_-_Cottage_Cheese_Fritters.jpg" alt="Paneer Pakora" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Paneer Pakora</h4>
+                            <p class="text-gray-600">Crispy fried paneer fritters, a popular Indian snack.</p>
+                            <span class="text-primary font-bold">₹150</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/Vegan_spring_rolls.jpg" alt="Vegetable Spring Rolls" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Vegetable Spring Rolls</h4>
+                            <p class="text-gray-600">Crispy rolls filled with mixed vegetables, served with chili sauce.</p>
+                            <span class="text-primary font-bold">₹120</span>
+                        </div>
+                         <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Hara_bhara_kabab-.JPG" alt="Hara Bhara Kebab" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Hara Bhara Kebab</h4>
+                            <p class="text-gray-600">Green patties made from spinach, peas, and potatoes.</p>
+                            <span class="text-primary font-bold">₹180</span>
+                        </div>
+                         <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Chicken_65_%28Dish%29.jpg" alt="Chicken 65" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Chicken 65</h4>
+                            <p class="text-gray-600">Spicy, deep-fried chicken appetizer from Chennai.</p>
+                            <span class="text-primary font-bold">₹250</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soups & Salads -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-dark border-b pb-2">Soups & Salads</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Tomato_soup.jpg" alt="Tomato Soup" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Cream of Tomato Soup</h4>
+                            <p class="text-gray-600">Classic creamy tomato soup, a comforting start to your meal.</p>
+                            <span class="text-primary font-bold">₹100</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Cucumber-raita.jpg" alt="Cucumber Raita" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Cucumber Raita</h4>
+                            <p class="text-gray-600">Refreshing yogurt dip with grated cucumber and mild spices.</p>
+                            <span class="text-primary font-bold">₹80</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Mixed_green_salad.jpg" alt="Mixed Green Salad" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Indian Mixed Green Salad</h4>
+                            <p class="text-gray-600">Fresh greens, cucumber, tomato, and onion with a light dressing.</p>
+                            <span class="text-primary font-bold">₹90</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bread & Rice -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-dark border-b pb-2">Breads & Rice</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Plain_Naan.jpg" alt="Naan" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Plain Naan</h4>
+                            <p class="text-gray-600">Soft, fluffy Indian bread baked in a tandoor.</p>
+                            <span class="text-primary font-bold">₹50</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Garlic_Naan.JPG" alt="Garlic Naan" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Garlic Naan</h4>
+                            <p class="text-gray-600">Naan infused with garlic and fresh coriander.</p>
+                            <span class="text-primary font-bold">₹60</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Basmati_Rice.jpg" alt="Basmati Rice" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Basmati Rice</h4>
+                            <p class="text-gray-600">Aromatic long-grain basmati rice, perfectly steamed.</p>
+                            <span class="text-primary font-bold">₹100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- From the Tandoor -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-dark border-b pb-2">From the Tandoor</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Chicken_Tikka.jpg" alt="Chicken Tikka" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Chicken Tikka</h4>
+                            <p class="text-gray-600">Boneless chicken marinated in spices and grilled in a tandoor.</p>
+                            <span class="text-primary font-bold">₹280</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/Seekh_Kabab.JPG" alt="Seekh Kebab" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Seekh Kebab</h4>
+                            <p class="text-gray-600">Minced lamb kebabs spiced and cooked on skewers in a tandoor.</p>
+                            <span class="text-primary font-bold">₹320</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beverages -->
+                <div>
+                    <h3 class="text-2xl font-semibold mb-4 text-dark border-b pb-2">Beverages</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Masala_Chai.JPG" alt="Masala Chai" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Masala Chai</h4>
+                            <p class="text-gray-600">Traditional Indian spiced tea.</p>
+                            <span class="text-primary font-bold">₹50</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Lassi_%28Sweet%29.JPG" alt="Sweet Lassi" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Sweet Lassi</h4>
+                            <p class="text-gray-600">Sweet yogurt drink, a perfect cooler.</p>
+                            <span class="text-primary font-bold">₹80</span>
+                        </div>
+                        <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://southindianfoods.in/recipe_picture_enlarge/instant-lemon-soda.jpg" alt="Fresh Lime Soda" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Fresh Lime Soda</h4>
+                            <p class="text-gray-600">Refreshing lime juice with soda, sweet or salty.</p>
+                            <span class="text-primary font-bold">₹70</span>
+                        </div>
+                         <div class="menu-item bg-gray-50 rounded-lg shadow-sm p-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/1/10/Bottled_water_in_supermarket.JPG" alt="Bottled Water" class="w-full h-32 object-cover rounded-md mb-2">
+                            <h4 class="text-xl font-semibold">Bottled Water</h4>
+                            <p class="text-gray-600">Still or sparkling water.</p>
+                            <span class="text-primary font-bold">₹40</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal Structure -->
+    <div id="custom-alert-modal" class="modal-overlay">
+        <div id="custom-alert-modal-content" class="modal-content">
+            <h3 class="text-2xl font-bold mb-4" id="alert-modal-title"></h3>
+            <p class="text-gray-700 mb-6" id="alert-modal-message"></p>
+            <button id="close-alert-modal" class="bg-primary hover:bg-secondary text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('#mobile-menu a').forEach(item => {
+            item.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Back to top button functionality
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) { // Show button after scrolling 300px
+                backToTopButton.classList.add('active');
+            } else {
+                backToTopButton.classList.remove('active');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Full Menu Modal functionality
+        const viewFullMenuBtn = document.getElementById('view-full-menu-btn');
+        const fullMenuModal = document.getElementById('full-menu-modal');
+        const closeMenuModalBtn = document.getElementById('close-menu-modal');
+
+        viewFullMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default anchor link behavior
+            fullMenuModal.classList.add('active');
+        });
+
+        closeMenuModalBtn.addEventListener('click', function() {
+            fullMenuModal.classList.remove('active');
+        });
+
+        // Close modal when clicking outside the content
+        fullMenuModal.addEventListener('click', function(e) {
+            if (e.target === fullMenuModal) {
+                fullMenuModal.classList.remove('active');
+            }
+        });
+
+        // Custom Alert Modal functions
+        const customAlertModal = document.getElementById('custom-alert-modal');
+        const customAlertTitle = document.getElementById('alert-modal-title');
+        const customAlertMessage = document.getElementById('alert-modal-message');
+        const closeCustomAlertBtn = document.getElementById('close-alert-modal');
+
+        function showAlert(title, message) {
+            customAlertTitle.textContent = title;
+            customAlertMessage.textContent = message;
+            customAlertModal.classList.add('active');
+        }
+
+        closeCustomAlertBtn.addEventListener('click', function() {
+            customAlertModal.classList.remove('active');
+        });
+
+        // Close custom alert modal when clicking outside the content
+        customAlertModal.addEventListener('click', function(e) {
+            if (e.target === customAlertModal) {
+                customAlertModal.classList.remove('active');
+            }
+        });
+
+        // Form submission handlers using custom alert
+        document.querySelector('#reservations form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showAlert('Reservation Submitted!', 'Your reservation request has been sent! We will contact you shortly to confirm.');
+            this.reset(); // Clear the form
+        });
+
+        document.querySelector('#contact form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showAlert('Message Sent!', 'Your message has been sent! We will get back to you soon.');
+            this.reset(); // Clear the form
+        });
+    </script>
+</body>
+</html>
